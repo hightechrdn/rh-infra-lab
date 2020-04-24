@@ -1,0 +1,39 @@
+---
+
+- name: Create RHEL 8.1 lab workstation
+  hosts: localhost
+  gather_facts: False
+  vars:
+    keypair: rh-infra-lab
+    instance_type: t3.medium
+    security_group: lab-systems-private
+    image: ami-058c6385273cf33e8
+    region: us-east-2
+    subnet: subnet-0c020946935fab135
+  tasks:
+    - name: Launch RHEL 8.1 instance
+      ec2:
+         key_name: "{{ keypair }}"
+         group: "{{ security_group }}"
+         instance_type: "{{ instance_type }}"
+         image: "{{ image }}"
+         wait: true
+         region: "{{ region }}"
+         vpc_subnet_id: "{{ subnet }}"
+         assign_public_ip: no
+      register: ec2
+
+    - name: Add new instance to host group
+      add_host:
+        hostname: "{{ item.private_ip }}"
+        groupname: launched
+      loop: "{{ ec2.instances }}"
+
+    - name: Wait for SSH to come up
+      delegate_to: "{{ item.private_dns_name }}"
+      wait_for_connection:
+        delay: 60
+        timeout: 320
+      loop: "{{ ec2.instances }}"
+
+
