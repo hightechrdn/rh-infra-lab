@@ -1,5 +1,5 @@
 ---
-# tasks file for my-ssh-key
+# tasks file for ssh-key-ec2
 - name: Generate SSH key for local user
   openssh_keypair:
     path: "{{ my_keyfile }}"

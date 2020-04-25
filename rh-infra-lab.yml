@@ -9,7 +9,7 @@
 
     - name: Create SSH key
       include_role:
-        name: my-ssh-key
+        name: ssh-key-ec2
         public: yes
 
     - name: Provision RHEL 8 workstation
