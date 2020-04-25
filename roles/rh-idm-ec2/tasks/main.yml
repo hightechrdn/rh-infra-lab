@@ -1,6 +1,6 @@
 ---
 # tasks file for rh-idm-ec2
-- name: Launch RHEL 8.1 IdM server instance
+- name: Launch RHEL 8 IdM server instance
   ec2:
      key_name: "{{ my_keyname }}"
      group: "{{ security_group }}"
@@ -34,7 +34,7 @@
   lineinfile: 
     path: "/tmp/{{ uuid.stdout }}-lab-environment.txt"
     regexp: "{{ item.private_ip }}"
-    line: "RHEL 8.1 IdM server: {{ item.private_ip }}"
+    line: "RHEL 8 IdM server: {{ item.private_ip }}"
     create: yes
   with_items: '{{ec2.instances}}'
 

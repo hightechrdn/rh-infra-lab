@@ -11,13 +11,17 @@
       include_role:
         name: ssh-key-ec2
 
-    - name: Provision RHEL workstation(s)
+    - name: Provision RHEL 8 workstation(s)
       include_role:
         name: rh-client-ec2
 
-    - name: Provision RHEL IdM server(s)
+    - name: Provision RHEL 8 IdM server(s)
       include_role:
         name: rh-idm-ec2
+
+    - name: Provision Red Hat Satellite 6 server(s)
+      include_role:
+        name: rh-sat6-ec2
 
     - name: Print lab information
       debug:
