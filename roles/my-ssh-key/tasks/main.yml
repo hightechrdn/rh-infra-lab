@@ -1,0 +1,12 @@
+---
+# tasks file for my-ssh-key
+- name: Generate SSH key for local user
+  openssh_keypair:
+    path: "{{ my_keyfile }}"
+
+- name: Upload public key to AWS
+  ec2_key:
+    name: "{{ my_keyname }}"
+    key_material: "{{ lookup('file', '{{ my_keyfile }}.pub') }}"
+    region: "{{ region }}"
+

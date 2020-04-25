@@ -1,0 +1,4 @@
+---
+# vars file for my-ssh-key
+my_keyfile: "{{ lookup('env','HOME') }}/.ssh/id_rsa"
+my_keyname: "{{ uuid.stdout }}-key"
