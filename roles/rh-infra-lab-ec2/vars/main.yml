@@ -1,0 +1,15 @@
+---
+# vars file for rh-infra-lab-ec2
+security_group: lab-systems-private
+region: us-east-2
+vpc_subnet_id: subnet-0c020946935fab135
+# workstation
+rh_wks_instance_type: t3.medium
+rh_wks_image: ami-058c6385273cf33e8
+# IdM server
+rh_idm_instance_type: t3.medium
+rh_idm_image: ami-0764fe114d80da573
+# Satellite 6 server
+rh_sat6_instance_type: t3.xlarge
+rh_sat6_image: ami-008e78104298ceec9
+

@@ -2,4 +2,4 @@
 - hosts: localhost
   remote_user: root
   roles:
-    - rh-wks-ec2
+    - rh-infra-lab-ec2

@@ -1,5 +1,5 @@
 ---
-- name: Create RHEL 8.1 lab workstation
+- name: Provision lab environment on AWS EC2 - Red Hat Infrastructure for Windows Administrators
   hosts: localhost
   gather_facts: False
   tasks:
@@ -7,11 +7,18 @@
       shell: uuidgen | cut -b 1,2,3,4
       register: uuid
 
-    - name: Create SSH key
+    - name: Upload SSH public key to AWS EC2
       include_role:
         name: ssh-key-ec2
-        public: yes
 
-    - name: Provision RHEL 8 workstation
+    - name: Provision RHEL workstation(s)
       include_role:
-        name: rh-wks-ec2
+        name: rh-client-ec2
+
+    - name: Provision RHEL IdM server(s)
+      include_role:
+        name: rh-idm-ec2
+
+    - name: Print lab information
+      debug:
+        msg: "Your UUID is {{ uuid.stdout }}. See /tmp/{{ uuid.stdout }}-lab-environment.txt for details regarding your new lab environment."

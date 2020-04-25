@@ -1,6 +1,6 @@
 ---
-# tasks file for rh-idm-ec2
-- name: Launch RHEL 8.1 IdM server instance
+# tasks file for rh-client-ec2
+- name: Launch RHEL 8.1 instance
   ec2:
      key_name: "{{ my_keyname }}"
      group: "{{ security_group }}"
@@ -10,7 +10,7 @@
      wait: true
      region: "{{ region }}"
      instance_tags:
-       Name: "{{ uuid.stdout }}-rhel8-idm"
+       Name: "{{ uuid.stdout }}-rhel8-client"
        project: demo1-labenv
        labenv: "{{ uuid.stdout }}"
      vpc_subnet_id: "{{ vpc_subnet_id }}"
@@ -34,7 +34,7 @@
   lineinfile: 
     path: "/tmp/{{ uuid.stdout }}-lab-environment.txt"
     regexp: "{{ item.private_ip }}"
-    line: "RHEL 8.1 IdM server: {{ item.private_ip }}"
+    line: "RHEL 8.1 client: {{ item.private_ip }}"
     create: yes
   with_items: '{{ec2.instances}}'
 
