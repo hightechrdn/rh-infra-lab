@@ -10,7 +10,7 @@
      wait: true
      region: "{{ region }}"
      instance_tags:
-       Name: "{{ uuid }}-rh-client"
+       Name: "{{ uuid }}-{{ system_type }}"
        project: "{{ project }}"
        labenv: "{{ uuid }}"
      vpc_subnet_id: "{{ vpc_subnet_id }}"
@@ -20,7 +20,7 @@
 - name: Add new instance to host group
   add_host:
     hostname: "{{ item.private_ip }}"
-    groupname: rh_client_launched
+    groupname: "{{ system_type }}_launched"
     uuid: "{{ uuid }}"
     instance_no: "{{ item.ami_launch_index }}"
   loop: "{{ ec2.instances }}"

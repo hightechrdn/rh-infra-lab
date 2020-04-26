@@ -1,0 +1,12 @@
+---
+# defaults file for deploy-lab-ec2-instance
+#instance_type: No default, must set when calling role
+#image: No default, must set when calling role
+#region: No default, must set when calling role
+#vpc_subnet_id: No default, must set when calling role
+#security_group: No default, must set when calling role
+#project: No default, must set when calling role
+#
+purpose: "Lab virtual machine"
+system_type: "lab_system"
+count: 1

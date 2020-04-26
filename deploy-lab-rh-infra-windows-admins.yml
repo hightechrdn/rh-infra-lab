@@ -28,6 +28,7 @@
         instance_type: t3.medium
         image: ami-0e66d4735ab291b3e
         purpose: "RHEL 8 client"
+        system_type: "rhel8_client"
       tags: rh-client
 
     - name: Provision RHEL 8 IdM server(s)
@@ -37,6 +38,7 @@
         instance_type: t3.medium
         image: ami-09d3af229af1d17d2
         purpose: "RHEL 8 IdM server"
+        system_type: "rhel8_idm"
       tags: rh-idm
 
     - name: Provision Red Hat Satellite 6 server(s)
@@ -46,6 +48,7 @@
         instance_type: t3.xlarge
         image: ami-033ecaafebce8a8bb
         purpose: "Red Hat Satellite 6 server"
+        system_type: "rhel7_sat6"
       tags: rh-sat6
 
 - name: Configure RHEL 8 client(s)
