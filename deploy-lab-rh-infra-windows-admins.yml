@@ -51,51 +51,6 @@
         system_type: "rhel7_sat6_server"
       tags: rhel7_sat6_server
 
-- name: Configure RHEL 8 client(s)
-  hosts: "{{ system_type | regex_replace ('-','_') }}_launched"
-  become: True
-  gather_facts: True
-  vars:
-    system_type: "rhel8_client"
-  tasks:
-    - name: Set hostname
-      command: "hostnamectl set-hostname {{ hostname }}"
-
-    - name: Update /etc/hosts
-      include_role:
-        name: bertvv.hosts
-  tags: rhel8_client
-
-- name: Configure RHEL 8 IdM servers(s)
-  hosts: "{{ system_type | regex_replace ('-','_') }}_launched"
-  become: True
-  gather_facts: True
-  vars:
-    system_type: "rhel8_idm_server"
-  tasks:
-    - name: Set hostname
-      command: "hostnamectl set-hostname {{ hostname }}"
-
-    - name: Update /etc/hosts
-      include_role:
-        name: bertvv.hosts
-  tags: rhel8_idm_server
-
-- name: Configure Red Hat Satellite 6 server(s)
-  hosts: "{{ system_type | regex_replace ('-','_') }}_launched"
-  become: True
-  gather_facts: True
-  vars:
-    system_type: "rhel7_sat6_server"
-  tasks:
-    - name: Set hostname
-      command: "hostnamectl set-hostname {{ hostname }}"
-
-    - name: Update /etc/hosts
-      include_role:
-        name: bertvv.hosts
-  tags: rhel7_sat6_server
-
 - name: Communicate results
   hosts: localhost
   gather_facts: False

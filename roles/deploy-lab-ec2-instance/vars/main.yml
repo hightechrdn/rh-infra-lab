@@ -1,3 +1,6 @@
 ---
 # vars file for deploy-lab-ec2-instance
+ip_address: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+domain: "{{ uuid }}.{{ base_domain }}"
+hostname: "{{ system_type | regex_replace ('_','-') }}-{{ item.ami_launch_index }}.{{ domain }}"
 my_keyname: "{{ uuid }}-lab-key"

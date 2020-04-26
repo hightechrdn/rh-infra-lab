@@ -1,12 +1,4 @@
 base_domain: demo1.pd.stonedoor.io
-instance: "{{ hostvars[inventory_hostname]['instance_no'] }}"
-ip_address: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
-domain: "{{ hostvars[inventory_hostname]['uuid'] }}.{{ base_domain }}"
-hostname: "{{ system_type | regex_replace ('_','-') }}-{{ instance }}.{{ domain }}"
-hosts_entries:
-  - name: "{{ hostname }}"
-    ip: "{{ ip_address }}"
-hosts_add_default_ipv4: False
 region: us-east-2
 vpc_subnet_id: subnet-0c020946935fab135
 security_group: lab-systems-private
