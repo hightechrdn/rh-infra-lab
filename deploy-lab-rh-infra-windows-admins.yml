@@ -55,6 +55,8 @@
   hosts: "{{ system_type | regex_replace ('-','_') }}_launched"
   become: True
   gather_facts: True
+  vars:
+    system_type: "rhel8_client"
   tasks:
     - name: Set hostname
       command: "hostnamectl set-hostname {{ hostname }}"
@@ -68,6 +70,8 @@
   hosts: "{{ system_type | regex_replace ('-','_') }}_launched"
   become: True
   gather_facts: True
+  vars:
+    system_type: "rhel8_idm"
   tasks:
     - name: Set hostname
       command: "hostnamectl set-hostname {{ hostname }}"
