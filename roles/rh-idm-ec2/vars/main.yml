@@ -6,5 +6,5 @@ image: ami-0764fe114d80da573
 count: 1
 region: us-east-2
 vpc_subnet_id: subnet-0c020946935fab135
-my_keyname: "{{ uuid.stdout }}-lab-key"
+my_keyname: "{{ uuid }}-lab-key"
 

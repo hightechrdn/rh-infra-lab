@@ -1,6 +1,6 @@
 ---
 # tasks file for rh-sat6-ec2
-- name: Launch Satellite 6 server
+- name: Launch Red Hat Satellite 6 instance
   ec2:
      key_name: "{{ my_keyname }}"
      group: "{{ security_group }}"
@@ -10,9 +10,9 @@
      wait: true
      region: "{{ region }}"
      instance_tags:
-       Name: "{{ uuid.stdout }}-rh-sat6"
+       Name: "{{ uuid }}-rh-sat6"
        project: demo1-labenv
-       labenv: "{{ uuid.stdout }}"
+       labenv: "{{ uuid }}"
      vpc_subnet_id: "{{ vpc_subnet_id }}"
      assign_public_ip: no
   register: ec2
@@ -20,8 +20,12 @@
 - name: Add new instance to host group
   add_host:
     hostname: "{{ item.private_ip }}"
-    groupname: launched
+    groupname: rh_sat6_launched
+    uuid: "{{ uuid }}"
+    instance_no: "{{ idx }}"
   loop: "{{ ec2.instances }}"
+  loop_control:
+    index_var: idx
 
 - name: Wait for SSH to come up
   delegate_to: "{{ item.private_dns_name }}"
@@ -32,10 +36,9 @@
 
 - name: Update lab environment information file
   lineinfile: 
-    path: "/tmp/{{ uuid.stdout }}-lab-environment.txt"
+    path: "/tmp/{{ uuid }}-lab-environment.txt"
     regexp: "{{ item.private_ip }}"
-    line: "Satellite 6 server: {{ item.private_ip }}"
+    line: "Red Hat Satellite 6 server - instance {{ instance }}: {{ item.private_ip }}"
     create: yes
-  loop: '{{ec2.instances}}'
-
+  loop: "{{ec2.instances}}"
 

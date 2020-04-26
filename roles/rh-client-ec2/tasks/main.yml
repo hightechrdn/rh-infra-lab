@@ -10,9 +10,9 @@
      wait: true
      region: "{{ region }}"
      instance_tags:
-       Name: "{{ uuid.stdout }}-rh-client"
+       Name: "{{ uuid }}-rh-client"
        project: demo1-labenv
-       labenv: "{{ uuid.stdout }}"
+       labenv: "{{ uuid }}"
      vpc_subnet_id: "{{ vpc_subnet_id }}"
      assign_public_ip: no
   register: ec2
@@ -21,6 +21,8 @@
   add_host:
     hostname: "{{ item.private_ip }}"
     groupname: rh_client_launched
+    uuid: "{{ uuid }}"
+    instance_no: "{{ item.ami_launch_index }}"
   loop: "{{ ec2.instances }}"
 
 - name: Wait for SSH to come up
@@ -32,9 +34,9 @@
 
 - name: Update lab environment information file
   lineinfile: 
-    path: "/tmp/{{ uuid.stdout }}-lab-environment.txt"
+    path: "/tmp/{{ uuid }}-lab-environment.txt"
     regexp: "{{ item.private_ip }}"
-    line: "RHEL 8 client: {{ item.private_ip }}"
+    line: "RHEL 8 client - instance {{ item.ami_launch_index }}: {{ item.private_ip }}"
     create: yes
   loop: "{{ec2.instances}}"
 

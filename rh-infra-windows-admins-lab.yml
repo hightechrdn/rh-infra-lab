@@ -1,6 +1,6 @@
 ---
 # Red Hat Infrastructure for Windows Administrators
-- name:
+- name: Assign UUID to lab deployment
   hosts: localhost
   gather_facts: False
   tasks:
@@ -10,6 +10,7 @@
 
     - set_fact:
         uuid: "{{ uuid_output.stdout }}"
+  tags: always
 
 - name: Provision lab environment on AWS EC2
   hosts: localhost
@@ -18,34 +19,64 @@
     - name: Upload SSH public key to AWS EC2
       include_role:
         name: ssh-key-ec2
+      tags: always
 
     - name: Provision RHEL 8 client(s)
       include_role:
         name: rh-client-ec2
+      tags: rh-client
 
-#    - name: Provision RHEL 8 IdM server(s)
-#      include_role:
-#        name: rh-idm-ec2
+    - name: Provision RHEL 8 IdM server(s)
+      include_role:
+        name: rh-idm-ec2
+      tags: rh-idm
 
-#    - name: Provision Red Hat Satellite 6 server(s)
-#      include_role:
-#        name: rh-sat6-ec2
+    - name: Provision Red Hat Satellite 6 server(s)
+      include_role:
+        name: rh-sat6-ec2
+      tags: rh-sat6
 
 - name: Configure RHEL 8 client(s)
   hosts: rh_client_launched
   gather_facts: True
   tasks:
     - name: Set hostname
+      hostname:
+        name: "rh-client-{{ instance }}.{{ domain }}"
+        use: redhat
+
+    - name: Update /etc/hosts
       include_role:
-        name: ahuffman.hosts
-      vars:
-        hosts_backup: False
-        hosts_set_hostname: True
-        hosts_hostname:
-          hostname: rh-client
-          domain: "{{ hostvars['localhost']['uuid'] }}.demo1.pd.stonedoor.io"
-          ip_addr: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
-          alias_loopback: False
+        name: bertvv.hosts
+  tags: rh-client
+
+- name: Configure RHEL 8 IdM servers(s)
+  hosts: rh_idm_launched
+  gather_facts: True
+  tasks:
+    - name: Set hostname
+      hostname:
+        name: "rh-idm-{{ instance }}.{{ domain }}"
+        use: redhat
+
+    - name: Update /etc/hosts
+      include_role:
+        name: bertvv.hosts
+  tags: rh-idm
+
+- name: Configure Red Hat Satellite 6 server(s)
+  hosts: rh_sat6_launched
+  gather_facts: True
+  tasks:
+    - name: Set hostname
+      hostname:
+        name: "rh-sat6-{{ instance }}.{{ domain }}"
+        use: redhat
+
+    - name: Update /etc/hosts
+      include_role:
+        name: bertvv.hosts
+  tags: rh-sat6
 
 - name: Communicate results
   hosts: localhost
@@ -54,7 +85,4 @@
     - name: Print lab information
       debug:
         msg: "Your UUID is {{ uuid }}. See /tmp/{{ uuid }}-lab-environment.txt for details regarding your new lab environment."
-
-    - name: Debug output
-      debug:
-        var: groups
+  tags: always

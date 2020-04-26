@@ -3,9 +3,7 @@
 instance_type: t3.medium
 security_group: lab-systems-private
 image: ami-058c6385273cf33e8
-count: 2
+count: 1
 region: us-east-2
 vpc_subnet_id: subnet-0c020946935fab135
-my_keyname: "{{ uuid.stdout }}-lab-key"
-hosts_backup: False
-hosts_set_hostname: True
+my_keyname: "{{ uuid }}-lab-key"
