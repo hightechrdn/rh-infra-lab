@@ -1,4 +1,4 @@
 region: us-east-2
 instance: "{{ hostvars[inventory_hostname]['instance_no'] }}"
 domain: "{{ hostvars[inventory_hostname]['uuid'] }}.demo1.pd.stonedoor.io"
-
+ip_address: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"

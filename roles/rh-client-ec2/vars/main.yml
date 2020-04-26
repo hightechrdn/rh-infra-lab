@@ -1,9 +1,0 @@
----
-# vars file for rh-client-ec2
-instance_type: t3.medium
-security_group: lab-systems-private
-image: ami-0e66d4735ab291b3e
-count: 1
-region: us-east-2
-vpc_subnet_id: subnet-0c020946935fab135
-my_keyname: "{{ uuid }}-lab-key"

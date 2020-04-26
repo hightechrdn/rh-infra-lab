@@ -23,17 +23,29 @@
 
     - name: Provision RHEL 8 client(s)
       include_role:
-        name: rh-client-ec2
+        name: deploy-lab-ec2-instance
+      vars:
+        instance_type: t3.medium
+        image: ami-0e66d4735ab291b3e
+        purpose: "RHEL 8 client"
       tags: rh-client
 
     - name: Provision RHEL 8 IdM server(s)
       include_role:
-        name: rh-idm-ec2
+        name: deploy-lab-ec2-instance
+      vars:
+        instance_type: t3.medium
+        image: ami-09d3af229af1d17d2
+        purpose: "RHEL 8 IdM server"
       tags: rh-idm
 
     - name: Provision Red Hat Satellite 6 server(s)
       include_role:
-        name: rh-sat6-ec2
+        name: deploy-lab-ec2-instance
+      vars:
+        instance_type: t3.xlarge
+        image: ami-033ecaafebce8a8bb
+        purpose: "Red Hat Satellite 6 server"
       tags: rh-sat6
 
 - name: Configure RHEL 8 client(s)
@@ -50,7 +62,7 @@
       vars:
         hosts_entries:
           - name: "rh-client-{{ instance }}.{{ domain }}"
-            ip: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+            ip: "{{ ip_address }}"
   tags: rh-client
 
 - name: Configure RHEL 8 IdM servers(s)
@@ -67,7 +79,7 @@
       vars:
         hosts_entries:
           - name: "rh-idm-{{ instance }}.{{ domain }}"
-            ip: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+            ip: "{{ ip_address }}"
   tags: rh-idm
 
 - name: Configure Red Hat Satellite 6 server(s)
@@ -84,7 +96,7 @@
       vars:
         hosts_entries:
           - name: "rh-sat6-{{ instance }}.{{ domain }}"
-            ip: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+            ip: "{{ ip_address }}"
   tags: rh-sat6
 
 - name: Communicate results

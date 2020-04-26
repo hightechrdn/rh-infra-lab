@@ -2,4 +2,4 @@
 # vars file for ssh-key-ec2
 my_keyfile: "{{ lookup('env','HOME') }}/.ssh/id_rsa"
 my_keyname: "{{ uuid }}-lab-key"
-
+region: us-east-2

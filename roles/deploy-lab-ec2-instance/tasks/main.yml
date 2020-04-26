@@ -1,6 +1,6 @@
 ---
-# tasks file for rh-idm-ec2
-- name: Launch RHEL 8 IdM instance
+# tasks file for deploy-lab-ec2-instance
+- name: Launch EC2 instance
   ec2:
      key_name: "{{ my_keyname }}"
      group: "{{ security_group }}"
@@ -10,8 +10,8 @@
      wait: true
      region: "{{ region }}"
      instance_tags:
-       Name: "{{ uuid }}-rh-idm"
-       project: demo1-labenv
+       Name: "{{ uuid }}-rh-client"
+       project: "{{ project }}"
        labenv: "{{ uuid }}"
      vpc_subnet_id: "{{ vpc_subnet_id }}"
      assign_public_ip: no
@@ -20,7 +20,7 @@
 - name: Add new instance to host group
   add_host:
     hostname: "{{ item.private_ip }}"
-    groupname: rh_idm_launched
+    groupname: rh_client_launched
     uuid: "{{ uuid }}"
     instance_no: "{{ item.ami_launch_index }}"
   loop: "{{ ec2.instances }}"
@@ -36,7 +36,7 @@
   lineinfile: 
     path: "/tmp/{{ uuid }}-lab-environment.txt"
     regexp: "{{ item.private_ip }}"
-    line: "RHEL 8 IdM server - instance {{ item.ami_launch_index }}: {{ item.private_ip }}"
+    line: "{{ purpose }} - instance {{ item.ami_launch_index }}: {{ item.private_ip }}"
     create: yes
   loop: "{{ ec2.instances }}"
 
