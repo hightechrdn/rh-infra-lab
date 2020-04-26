@@ -59,14 +59,14 @@
   gather_facts: True
   tasks:
     - name: Set hostname
-      command: hostnamectl set-hostname rh-client-{{ instance }}.{{ domain }}
+      command: hostnamectl set-hostname rh-idm-{{ instance }}.{{ domain }}
 
     - name: Update /etc/hosts
       include_role:
         name: bertvv.hosts
       vars:
         hosts_entries:
-          - name: "rh-client-{{ instance }}.{{ domain }}"
+          - name: "rh-idm-{{ instance }}.{{ domain }}"
             ip: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
   tags: rh-idm
 
@@ -76,14 +76,14 @@
   gather_facts: True
   tasks:
     - name: Set hostname
-      command: hostnamectl set-hostname rh-client-{{ instance }}.{{ domain }}
+      command: hostnamectl set-hostname rh-sat6-{{ instance }}.{{ domain }}
 
     - name: Update /etc/hosts
       include_role:
         name: bertvv.hosts
       vars:
         hosts_entries:
-          - name: "rh-client-{{ instance }}.{{ domain }}"
+          - name: "rh-sat6-{{ instance }}.{{ domain }}"
             ip: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
   tags: rh-sat6
 
