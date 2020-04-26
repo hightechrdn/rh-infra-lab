@@ -29,7 +29,7 @@
         image: ami-0e66d4735ab291b3e
         purpose: "RHEL 8 client"
         system_type: "rhel8_client"
-      tags: rh-client
+      tags: rhel8_client
 
     - name: Provision RHEL 8 IdM server(s)
       include_role:
@@ -38,8 +38,8 @@
         instance_type: t3.medium
         image: ami-09d3af229af1d17d2
         purpose: "RHEL 8 IdM server"
-        system_type: "rhel8_idm"
-      tags: rh-idm
+        system_type: "rhel8_idm_server"
+      tags: rhel8_idm_server
 
     - name: Provision Red Hat Satellite 6 server(s)
       include_role:
@@ -48,8 +48,8 @@
         instance_type: t3.xlarge
         image: ami-033ecaafebce8a8bb
         purpose: "Red Hat Satellite 6 server"
-        system_type: "rhel7_sat6"
-      tags: rh-sat6
+        system_type: "rhel7_sat6_server"
+      tags: rhel7_sat6_server
 
 - name: Configure RHEL 8 client(s)
   hosts: "{{ system_type | regex_replace ('-','_') }}_launched"
@@ -64,14 +64,14 @@
     - name: Update /etc/hosts
       include_role:
         name: bertvv.hosts
-  tags: rh-client
+  tags: rhel8_client
 
 - name: Configure RHEL 8 IdM servers(s)
   hosts: "{{ system_type | regex_replace ('-','_') }}_launched"
   become: True
   gather_facts: True
   vars:
-    system_type: "rhel8_idm"
+    system_type: "rhel8_idm_server"
   tasks:
     - name: Set hostname
       command: "hostnamectl set-hostname {{ hostname }}"
@@ -79,12 +79,14 @@
     - name: Update /etc/hosts
       include_role:
         name: bertvv.hosts
-  tags: rh-idm
+  tags: rhel8_idm_server
 
 - name: Configure Red Hat Satellite 6 server(s)
   hosts: "{{ system_type | regex_replace ('-','_') }}_launched"
   become: True
   gather_facts: True
+  vars:
+    system_type: "rhel7_sat6_server"
   tasks:
     - name: Set hostname
       command: "hostnamectl set-hostname {{ hostname }}"
@@ -92,7 +94,7 @@
     - name: Update /etc/hosts
       include_role:
         name: bertvv.hosts
-  tags: rh-sat6
+  tags: rhel7_sat6_server
 
 - name: Communicate results
   hosts: localhost
