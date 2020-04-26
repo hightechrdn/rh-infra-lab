@@ -38,5 +38,5 @@
     regexp: "{{ item.private_ip }}"
     line: "Red Hat Satellite 6 server - instance {{ item.ami_launch_index }}: {{ item.private_ip }}"
     create: yes
-  loop: "{{ec2.instances}}"
+  loop: "{{ ec2.instances }}"
 
