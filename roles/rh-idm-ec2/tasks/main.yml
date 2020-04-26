@@ -22,10 +22,8 @@
     hostname: "{{ item.private_ip }}"
     groupname: rh_idm_launched
     uuid: "{{ uuid }}"
-    instance_no: "{{ idx }}"
+    instance_no: "{{ item.ami_launch_index }}"
   loop: "{{ ec2.instances }}"
-  loop_control:
-    index_var: idx
 
 - name: Wait for SSH to come up
   delegate_to: "{{ item.private_dns_name }}"
@@ -38,7 +36,7 @@
   lineinfile: 
     path: "/tmp/{{ uuid }}-lab-environment.txt"
     regexp: "{{ item.private_ip }}"
-    line: "RHEL 8 IdM server - instance {{ instance }}: {{ item.private_ip }}"
+    line: "RHEL 8 IdM server - instance {{ item.ami_launch_index }}: {{ item.private_ip }}"
     create: yes
   loop: "{{ec2.instances}}"
 
