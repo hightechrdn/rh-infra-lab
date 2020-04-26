@@ -38,44 +38,53 @@
 
 - name: Configure RHEL 8 client(s)
   hosts: rh_client_launched
+  become: True
   gather_facts: True
   tasks:
     - name: Set hostname
-      hostname:
-        name: "rh-client-{{ instance }}.{{ domain }}"
-        use: redhat
+      command: "hostnamectl set-hostname rh-client-{{ instance }}.{{ domain }}"
 
     - name: Update /etc/hosts
       include_role:
         name: bertvv.hosts
+      vars:
+        hosts_entries:
+          - name: "rh-client-{{ instance }}.{{ domain }}"
+            ip: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
   tags: rh-client
 
 - name: Configure RHEL 8 IdM servers(s)
   hosts: rh_idm_launched
+  become: True
   gather_facts: True
   tasks:
     - name: Set hostname
-      hostname:
-        name: "rh-idm-{{ instance }}.{{ domain }}"
-        use: redhat
+      command: hostnamectl set-hostname rh-client-{{ instance }}.{{ domain }}
 
     - name: Update /etc/hosts
       include_role:
         name: bertvv.hosts
+      vars:
+        hosts_entries:
+          - name: "rh-client-{{ instance }}.{{ domain }}"
+            ip: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
   tags: rh-idm
 
 - name: Configure Red Hat Satellite 6 server(s)
   hosts: rh_sat6_launched
+  become: True
   gather_facts: True
   tasks:
     - name: Set hostname
-      hostname:
-        name: "rh-sat6-{{ instance }}.{{ domain }}"
-        use: redhat
+      command: hostnamectl set-hostname rh-client-{{ instance }}.{{ domain }}
 
     - name: Update /etc/hosts
       include_role:
         name: bertvv.hosts
+      vars:
+        hosts_entries:
+          - name: "rh-client-{{ instance }}.{{ domain }}"
+            ip: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
   tags: rh-sat6
 
 - name: Communicate results
