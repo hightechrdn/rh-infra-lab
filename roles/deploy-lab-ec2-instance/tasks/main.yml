@@ -20,7 +20,7 @@
 - name: Add new instance to host group
   add_host:
     hostname: "{{ item.private_ip }}"
-    groupname: "{{ system_type }}_launched"
+    groupname: "{{ system_type | regex_replace ('-','_') }}_launched"
     uuid: "{{ uuid }}"
     instance_no: "{{ item.ami_launch_index }}"
   loop: "{{ ec2.instances }}"

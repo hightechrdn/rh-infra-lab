@@ -52,54 +52,42 @@
       tags: rh-sat6
 
 - name: Configure RHEL 8 client(s)
-  hosts: rh_client_launched
+  hosts: "{{ system_type | regex_replace ('-','_') }}_launched"
   become: True
   gather_facts: True
   tasks:
     - name: Set hostname
-      command: "hostnamectl set-hostname rh-client-{{ instance }}.{{ domain }}"
+      command: "hostnamectl set-hostname {{ hostname }}"
 
     - name: Update /etc/hosts
       include_role:
         name: bertvv.hosts
-      vars:
-        hosts_entries:
-          - name: "rh-client-{{ instance }}.{{ domain }}"
-            ip: "{{ ip_address }}"
   tags: rh-client
 
 - name: Configure RHEL 8 IdM servers(s)
-  hosts: rh_idm_launched
+  hosts: "{{ system_type | regex_replace ('-','_') }}_launched"
   become: True
   gather_facts: True
   tasks:
     - name: Set hostname
-      command: hostnamectl set-hostname rh-idm-{{ instance }}.{{ domain }}
+      command: "hostnamectl set-hostname {{ hostname }}"
 
     - name: Update /etc/hosts
       include_role:
         name: bertvv.hosts
-      vars:
-        hosts_entries:
-          - name: "rh-idm-{{ instance }}.{{ domain }}"
-            ip: "{{ ip_address }}"
   tags: rh-idm
 
 - name: Configure Red Hat Satellite 6 server(s)
-  hosts: rh_sat6_launched
+  hosts: "{{ system_type | regex_replace ('-','_') }}_launched"
   become: True
   gather_facts: True
   tasks:
     - name: Set hostname
-      command: hostnamectl set-hostname rh-sat6-{{ instance }}.{{ domain }}
+      command: "hostnamectl set-hostname {{ hostname }}"
 
     - name: Update /etc/hosts
       include_role:
         name: bertvv.hosts
-      vars:
-        hosts_entries:
-          - name: "rh-sat6-{{ instance }}.{{ domain }}"
-            ip: "{{ ip_address }}"
   tags: rh-sat6
 
 - name: Communicate results
