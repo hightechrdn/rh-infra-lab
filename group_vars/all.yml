@@ -1,5 +1,8 @@
-base_domain: demo1.pd.stonedoor.io
-region: us-east-2
-vpc_subnet_id: subnet-0c020946935fab135
-security_group: lab-systems-private
-project: demo1-labenv
+base_domain: "demo1.pd.stonedoor.io"
+region: "us-east-2"
+vpc_subnet_id: "subnet-0c020946935fab135"
+security_group: "lab-systems-private"
+project: "demo1-labenv"
+rhel8_client_image: "ami-0e66d4735ab291b3e"
+rhel8_idm_server_image: "ami-09d3af229af1d17d2"
+rhel7_sat6_server_image: "ami-033ecaafebce8a8bb"

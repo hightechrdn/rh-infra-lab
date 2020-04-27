@@ -26,7 +26,7 @@
         name: deploy-lab-ec2-instance
       vars:
         instance_type: t3.medium
-        image: ami-0e66d4735ab291b3e
+        image: "{{ rhel8_client_image }}"
         purpose: "RHEL 8 client"
         system_type: "rhel8_client"
       tags: rhel8_client
@@ -36,7 +36,7 @@
         name: deploy-lab-ec2-instance
       vars:
         instance_type: t3.medium
-        image: ami-09d3af229af1d17d2
+        image: "{{ rhel8_idm_server_image }}"
         purpose: "RHEL 8 IdM server"
         system_type: "rhel8_idm_server"
       tags: rhel8_idm_server
@@ -46,7 +46,7 @@
         name: deploy-lab-ec2-instance
       vars:
         instance_type: t3.xlarge
-        image: ami-033ecaafebce8a8bb
+        image: "{{ rhel7_sat6_server_image }}"
         purpose: "Red Hat Satellite 6 server"
         system_type: "rhel7_sat6_server"
       tags: rhel7_sat6_server
