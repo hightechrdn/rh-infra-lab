@@ -51,6 +51,13 @@
         system_type: "rhel7_sat6_server"
       tags: rhel7_sat6_server
 
+    - name: Document lab environment
+      vars:
+        create_lab_env_doc: True
+      include_role:
+        name: deploy-lab-ec2-instance
+      tags: always
+
     - name: Remove SSH public key from AWS EC2
       vars:
         remove_aws_key: True
