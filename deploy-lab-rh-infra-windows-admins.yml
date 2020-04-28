@@ -51,6 +51,13 @@
         system_type: "rhel7_sat6_server"
       tags: rhel7_sat6_server
 
+    - name: Remove SSH public key from AWS EC2
+      vars:
+        remove_aws_key: True
+      include_role:
+        name: ssh-key-ec2
+      tags: always
+
 - name: Communicate results
   hosts: localhost
   gather_facts: False
