@@ -1,6 +1,12 @@
 ---
 # tasks file for ssh-key-ec2
-- name: Generate SSH key for local user if it doesn't already exist
+- name: Create directory for SSH key
+  file:
+    path: "{{ lookup('env','HOME') }}/.ssh/"
+    state: directory
+    mode: '0700'
+
+- name: Generate SSH key for local user
   openssh_keypair:
     path: "{{ my_keyfile }}"
 
