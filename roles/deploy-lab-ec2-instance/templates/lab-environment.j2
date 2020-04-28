@@ -1,7 +1,0 @@
-{{ '-' * 82 }}
-|{{ '%-30s'|format('Purpose') }}|{{ '%-12s'|format('Instance No.') }}|{{ '%-20s'|format('Instance ID') }}|{{ '%-15s'|format('IP address') }}|
-|{{ '-' * 30 }}|{{ '-' * 12 }}|{{ '-' * 20 }}|{{ '-' * 15 }}|
-{% for instance in ec2.instances %}
-|{{ '%-30s'|format(purpose)|truncate(30,True,'',0) }}|{{ '%-12s'|format(instance.ami_launch_index) }}|{{ '%-20s'|format(instance.id) }}|{{ '%-15s'|format(instance.private_ip) }}|
-{% endfor %}
-{{ '-' * 82 }}
