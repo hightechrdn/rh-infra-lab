@@ -46,10 +46,15 @@
     line: "{{ item.private_ip }} {{ hostname }}"
   loop: "{{ ec2.instances }}"
 
+- name: Add headers to lab environment information file
+  copy:
+    content: |
+      |{{ '%-30s'|format('Purpose') }}|{{ '%-12s'|format('Instance No.') }}|{{ '%-20s'|format('Instance ID') }}|{{ '%-15s'|format('IP address') }}|
+    dest: "/tmp/{{ uuid }}-lab-environment.txt"
+
 - name: Update lab environment information file
   lineinfile: 
     path: "/tmp/{{ uuid }}-lab-environment.txt"
     regexp: "{{ item.private_ip }}"
-    line: "{{ purpose }} (instance #{{ item.ami_launch_index }}): {{ item.private_ip }}"
-    create: yes
+    line: "|{{ '%-30s'|format(purpose)|truncate(30,True,'',0) }}|{{ '%-12s'|format(item.ami_launch_index) }}|{{ '%-20s'|format(item.id) }}|{{ '%-15s'|format(item.private_ip) }}|"
   loop: "{{ ec2.instances }}"
