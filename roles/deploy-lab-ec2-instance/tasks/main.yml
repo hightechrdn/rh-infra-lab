@@ -47,15 +47,21 @@
     line: "{{ item.private_ip }} {{ hostname }}"
   loop: "{{ ec2.instances }}"
 
-- name: Add headers to lab environment information file
+- name: Add headers to lab environment file
   copy:
     content: |
+      {{ '-' * 82 }}
       |{{ '%-30s'|format('Purpose') }}|{{ '%-12s'|format('Instance No.') }}|{{ '%-20s'|format('Instance ID') }}|{{ '%-15s'|format('IP address') }}|
+      |{{ '-' * 30 }}|{{ '-' * 12 }}|{{ '-' * 20 }}|{{ '-' * 15 }}|
     dest: "/tmp/{{ uuid }}-lab-environment.txt"
 
-- name: Update lab environment information file
+- name: Add EC2 instance information to lab environment file
   lineinfile: 
     path: "/tmp/{{ uuid }}-lab-environment.txt"
     regexp: "{{ item.private_ip }}"
     line: "|{{ '%-30s'|format(purpose)|truncate(30,True,'',0) }}|{{ '%-12s'|format(item.ami_launch_index) }}|{{ '%-20s'|format(item.id) }}|{{ '%-15s'|format(item.private_ip) }}|"
   loop: "{{ ec2.instances }}"
+
+- name: Close out table in lab environment file
+  shell: |
+    echo "{{ '-' * 82 }}" >> /tmp/{{ uuid }}-lab-environment.txt
