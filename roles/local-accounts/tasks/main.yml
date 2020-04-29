@@ -9,6 +9,7 @@
     state: present
 
 - name: Setup SSH access using public key
+  become: True
   authorized_key:
     user: "{{ username }}"
     state: present
