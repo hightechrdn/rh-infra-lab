@@ -4,7 +4,7 @@
   become: True
   user:
     append: yes
-    groups: "{{ groups }}"
+    groups: "{{ supplementary_groups }}"
     name: "{{ username }}"
     state: present
 
