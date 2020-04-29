@@ -4,7 +4,7 @@
   block:
   - name: Create directory for SSH key
     file:
-      path: "{{ lookup('env','HOME') }}/.ssh/"
+      path: "{{ ssh_key_dir }}"
       state: directory
       mode: '0700'
   
@@ -15,7 +15,7 @@
   - name: Upload public key to AWS
     ec2_key:
       name: "{{ my_keyname }}"
-      key_material: "{{ lookup('file', '{{ my_keyfile }}.pub') }}"
+      key_material: "{{ lookup('file', '{{ my_public_key }}') }}"
       region: "{{ region }}"
       state: present
   when: not remove_aws_key

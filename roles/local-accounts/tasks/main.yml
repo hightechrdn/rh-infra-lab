@@ -4,12 +4,12 @@
   become: True
   user:
     append: yes
-    groups: wheel
-    name: "{{ lookup('env','USER') }}"
+    groups: "{{ groups }}"
+    name: "{{ username }}"
     state: present
 
 - name: Setup SSH access using public key
   authorized_key:
-    user: "{{ lookup('env','USER') }}"
+    user: "{{ username }}"
     state: present
-    key: "{{ lookup('file', '{{ my_keyfile }}.pub') }}" 
+    key: "{{ lookup('file', '{{ my_public_key }}') }}" 
