@@ -1,5 +1,5 @@
 ---
-# Red Hat Infrastructure for Windows Administrators
+# Deploy lab environment on AWS EC2: Red Hat Infrastructure for Windows Administrators
 - name: Assign UUID to lab deployment
   hosts: localhost
   gather_facts: False
@@ -65,7 +65,21 @@
         name: ssh-key-ec2
       tags: always
 
-- name: Communicate results
+- name: Configure Satellite 6 servers
+  hosts: rhel7_sat6_server_launched
+  tasks:
+    - name: Apply RHEL 7 Satellite 6 server role
+      include_role:
+        name: rhel7-sat6-server
+
+- name: Configure access to new hosts
+  hosts: launched_ec2_instances
+  tasks:
+    - name: Add local account(s)
+      include_role:
+        name: local-accounts
+
+- name: Communicate deployment results
   hosts: localhost
   gather_facts: False
   tasks:

@@ -8,12 +8,16 @@
       |{{ '-' * 30 }}|{{ '-' * 12 }}|{{ '-' * 20 }}|{{ '-' * 15 }}|
     dest: "/tmp/{{ uuid }}-lab-environment.txt"
 
-- name: Add EC2 instance information to lab environment file
-  lineinfile:
-    path: "/tmp/{{ uuid }}-lab-environment.txt"
-    regexp: "{{ item.private_ip }}"
-    line: "|{{ '%-30s'|format(purpose)|truncate(30,True,'',0) }}|{{ '%-12s'|format(item.ami_launch_index) }}|{{ '%-20s'|format(item.id) }}|{{ '%-15s'|format(item.private_ip) }}|"
-  loop: "{{ deployed_ec2_instances }}"
+#- name: Add EC2 instance information to lab environment file
+#  lineinfile:
+#    path: "/tmp/{{ uuid }}-lab-environment.txt"
+#    regexp: "{{ hostvars[item]['hostname'] }}"
+#    line: "|{{ '%-30s'|format(hostvars[item]['purpose'])|truncate(30,True,'',0) }}|{{ '%-12s'|format(hostvars[item]['ami_launch_index']) }}|{{ '%-20s'|format(hostvars[item]['id']) }}|{{ '%-15s'|format(hostvars[item]['hostname']) }}|"
+#  loop: "{{ groups['launched_ec2_instances'] }}"
+
+- name: debug task
+  debug:
+    msg: "{{ groups['launched_ec2_instances'] }}"
 
 - name: Close out table in lab environment file
   shell: |

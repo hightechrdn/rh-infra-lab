@@ -1,0 +1,13 @@
+---
+# tasks file for rhel7-sa6-server 
+- name: Run Satellite 6 installer
+  become: True
+  shell: |
+    satellite-installer --scenario satellite -v \
+      --foreman-initial-organization SDG \
+      --foreman-initial-location LAB \
+      --foreman-initial-admin-password redhat \
+      --foreman-proxy-puppetca true \
+      --foreman-proxy-tftp true \
+      --enable-foreman-plugin-discovery \
+      --enable-foreman-proxy-plugin-remote-execution-ssh

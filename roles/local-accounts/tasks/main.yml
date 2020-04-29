@@ -1,0 +1,10 @@
+---
+# tasks file for local-accounts
+- name: Create local user (with sudo to root permission)
+  command: "useradd -G wheel {{ lookup('env','USER') }}" 
+
+- name: Setup SSH access using public key
+  authorized_key:
+    user: "{{ lookup('env','USER') }}"
+    state: present
+    key: "{{ lookup('file', '{{ my_keyfile }}.pub') }}" 

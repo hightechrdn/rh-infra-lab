@@ -1,56 +1,60 @@
 ---
 # tasks file for deploy-lab-ec2-instance
-- name: Launch EC2 instance
-  ec2:
-     key_name: "{{ my_keyname }}"
-     group: "{{ security_group }}"
-     instance_type: "{{ instance_type }}"
-     image: "{{ image }}"
-     count: "{{ count }}"
-     wait: true
-     region: "{{ region }}"
-     instance_tags:
-       Name: "{{ uuid }}-{{ system_type }}"
-       project: "{{ project }}"
-       labenv: "{{ uuid }}"
-       user: "{{ lookup('env','USER') }}"
-     vpc_subnet_id: "{{ vpc_subnet_id }}"
-     assign_public_ip: no
-  register: ec2
-
-- name: Merge ec2 instance data
-  set_fact:
-    deployed_ec2_instances: "{{ deployed_ec2_instances + ec2.instances }}"
-
-- name: Add new instance to host group
-  add_host:
-    hostname: "{{ item.private_ip }}"
-    groupname: "{{ system_type | regex_replace ('-','_') }}_launched"
-    uuid: "{{ uuid }}"
-  loop: "{{ ec2.instances }}"
-
-- name: Wait for SSH to come up
-  delegate_to: "{{ item.private_dns_name }}"
-  wait_for_connection:
-    delay: 60
-    timeout: 320
-  loop: "{{ ec2.instances }}"
-
-- name: Set hostname on new host
-  delegate_to: "{{ item.private_dns_name }}"
-  become: True
-  command: "hostnamectl set-hostname {{ hostname }}"
-  loop: "{{ ec2.instances }}"
-
-- name: Update /etc/hosts on new host
-  delegate_to: "{{ item.private_dns_name }}"
-  become: True
-  lineinfile: 
-    path: "/etc/hosts"
-    regexp: "{{ item.private_ip }}"
-    line: "{{ item.private_ip }} {{ hostname }}"
-  loop: "{{ ec2.instances }}"
-
+- name: Deploy new host on AWS EC2
+  block:
+  - name: Launch EC2 instance
+    ec2:
+       key_name: "{{ my_keyname }}"
+       group: "{{ security_group }}"
+       instance_type: "{{ instance_type }}"
+       image: "{{ image }}"
+       count: "{{ count }}"
+       wait: true
+       region: "{{ region }}"
+       instance_tags:
+         Name: "{{ uuid }}-{{ system_type }}"
+         project: "{{ project }}"
+         labenv: "{{ uuid }}"
+         user: "{{ lookup('env','USER') }}"
+       vpc_subnet_id: "{{ vpc_subnet_id }}"
+       assign_public_ip: no
+    register: ec2
+  
+  - name: Add new instance to host group
+    add_host:
+      groups:
+        - "{{ system_type | regex_replace ('-','_') }}_launched"
+        - launched_ec2_instances
+      hostname: "{{ item.private_ip }}"
+      id: "{{ item.id }}"
+      ami_launch_index: "{{ item.ami_launch_index }}"
+      purpose: "{{ purpose }}"
+      uuid: "{{ uuid }}"
+    loop: "{{ ec2.instances }}"
+  
+  - name: Wait for SSH to come up
+    delegate_to: "{{ item.private_dns_name }}"
+    wait_for_connection:
+      delay: 60
+      timeout: 320
+    loop: "{{ ec2.instances }}"
+  
+  - name: Set hostname on new host
+    delegate_to: "{{ item.private_dns_name }}"
+    become: True
+    command: "hostnamectl set-hostname {{ hostname }}"
+    loop: "{{ ec2.instances }}"
+  
+  - name: Update /etc/hosts on new host
+    delegate_to: "{{ item.private_dns_name }}"
+    become: True
+    lineinfile: 
+      path: "/etc/hosts"
+      regexp: "{{ item.private_ip }}"
+      line: "{{ item.private_ip }} {{ hostname }}"
+    loop: "{{ ec2.instances }}"
+  when: not create_lab_env_doc
+  
 - name: Run tasks to document new lab environment
   include_tasks: lab_env_doc.yml
   when: create_lab_env_doc
