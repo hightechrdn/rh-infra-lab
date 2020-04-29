@@ -25,9 +25,10 @@
       groups:
         - "{{ system_type | regex_replace ('-','_') }}_launched"
         - launched_ec2_instances
+      ami_launch_index: "{{ item.ami_launch_index }}"
       hostname: "{{ item.private_ip }}"
       id: "{{ item.id }}"
-      ami_launch_index: "{{ item.ami_launch_index }}"
+      private_ip: "{{ item.private_ip }}"
       purpose: "{{ purpose }}"
       uuid: "{{ uuid }}"
     loop: "{{ ec2.instances }}"
