@@ -1,16 +1,24 @@
 ---
 # tasks file for local-accounts
-- name: Create local user (with sudo to root permission)
-  become: True
-  user:
-    append: yes
-    groups: "{{ supplementary_groups }}"
-    name: "{{ username }}"
-    state: present
+- name: Configure local accounts
+  block:
+    become: True
+    - name: Create local user
+      user:
+        append: yes
+        groups: "{{ supplementary_groups }}"
+        name: "{{ username }}"
+        state: present
 
-- name: Setup SSH access using public key
-  become: True
-  authorized_key:
-    user: "{{ username }}"
-    state: present
-    key: "{{ lookup('file', '{{ my_public_key }}') }}" 
+    - name: Configure sudo to root without password for wheel group
+      lineinfile:
+        path: /etc/sudoers
+        regex: "^%wheel"
+        line: "%wheel        ALL=(ALL)       NOPASSWD: ALL"
+        state: present
+
+    - name: Add SSH public key to authorized_keys
+      authorized_key:
+        user: "{{ username }}"
+        state: present
+        key: "{{ lookup('file', '{{ my_public_key }}') }}" 
