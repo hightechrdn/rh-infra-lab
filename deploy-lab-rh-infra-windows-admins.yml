@@ -47,7 +47,7 @@
       vars:
         instance_type: t3.xlarge
         image: "{{ rhel7_sat6_server_image }}"
-        purpose: "Red Hat Satellite 6 server"
+        purpose: "Satellite 6 server (RHEL 7)"
         system_type: "rhel7_sat6_server"
       tags: rhel7_sat6_server
 
@@ -85,5 +85,5 @@
   tasks:
     - name: Print lab information
       debug:
-        msg: "Your UUID is {{ uuid }}. See /tmp/{{ uuid }}-lab-environment.txt for details regarding your new lab environment."
+        msg: "Your UUID is {{ uuid }}. See /tmp/{{ uuid }}-lab-environment.txt for list of hosts deployed."
   tags: always
