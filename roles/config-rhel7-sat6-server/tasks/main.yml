@@ -27,6 +27,6 @@
 
   - name: Update /etc/hosts
     copy:
-      content: "{{ final_hosts.stdout }}"
+      content: "{{ final_hosts.stdout }}\n"
       dest: /etc/hosts
   become: True
