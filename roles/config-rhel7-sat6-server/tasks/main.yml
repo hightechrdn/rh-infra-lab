@@ -21,6 +21,12 @@
         --username admin \
         --password redhat
 
-  - name: Remove duplicate lines from /etc/hosts file
+  - name: Read /etc/hosts file and dedup
     command: awk '!a[$0]++' /etc/hosts
+    register: final_hosts
+
+  - name: Update /etc/hosts
+    copy:
+      content: "{{ final_hosts.stdout }}"
+      dest: /etc/hosts
   become: True
