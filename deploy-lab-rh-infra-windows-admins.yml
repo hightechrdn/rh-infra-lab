@@ -68,9 +68,9 @@
 - name: Configure Satellite 6 servers
   hosts: rhel7_sat6_server_launched
   tasks:
-    - name: Apply RHEL 7 Satellite 6 server role
+    - name: Apply configure RHEL 7 Satellite 6 server role
       include_role:
-        name: rhel7-sat6-server
+        name: config-rhel7-sat6-server
 
 - name: Configure access to new hosts
   hosts: launched_ec2_instances

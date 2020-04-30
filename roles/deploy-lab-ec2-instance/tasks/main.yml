@@ -32,28 +32,28 @@
       purpose: "{{ purpose }}"
       uuid: "{{ uuid }}"
     loop: "{{ ec2.instances }}"
+  when: not create_lab_env_doc
   
+- name: Basic host configuration
+  block:
   - name: Wait for SSH to come up
-    delegate_to: "{{ item.private_dns_name }}"
     wait_for_connection:
       delay: 60
       timeout: 320
     loop: "{{ ec2.instances }}"
   
   - name: Set hostname on new host
-    delegate_to: "{{ item.private_dns_name }}"
-    become: True
     command: "hostnamectl set-hostname {{ hostname }}"
     loop: "{{ ec2.instances }}"
   
   - name: Update /etc/hosts on new host
-    delegate_to: "{{ item.private_dns_name }}"
-    become: True
     lineinfile: 
       path: "/etc/hosts"
       regexp: "{{ item.private_ip }}"
       line: "{{ item.private_ip }} {{ hostname }}"
     loop: "{{ ec2.instances }}"
+  become: True
+  delegate_to: "{{ item.private_dns_name }}"
   when: not create_lab_env_doc
   
 - name: Run tasks to document new lab environment
