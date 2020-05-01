@@ -68,7 +68,7 @@
 - name: Configure Satellite 6 servers
   hosts: rhel7_sat6_server_launched
   tasks:
-    - name: Apply configure RHEL 7 Satellite 6 server role
+    - name: Execute RHEL 7 Satellite 6 server configuration role
       include_role:
         name: config-rhel7-sat6-server
 
