@@ -3,7 +3,7 @@
 #image: No default, must set when calling role
 #region: No default, must set when calling role
 #vpc_subnet_id: No default, must set when calling role
-#security_group: No default, must set when calling role
+#security_groups: No default, must set when calling role
 #
 create_lab_env_doc: False
 #
