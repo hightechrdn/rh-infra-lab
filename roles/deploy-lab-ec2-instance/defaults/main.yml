@@ -7,8 +7,9 @@
 #
 create_lab_env_doc: False
 #
+count: 1
 instance_type: "t3.small"
+hosts_file: "/lab01/rh-infra-lab-hosts"
 project: "my-lab-environment"
 purpose: "Lab virtual machine"
 system_type: "lab_system"
-count: 1
