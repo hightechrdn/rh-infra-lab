@@ -2,7 +2,7 @@
 # lab_env_doc.yml
 - name: Add headers to lab environment file
   vars:
-    deploy_date: "{{lookup('pipe', 'date +%Y-%m-%d\ %H\:%M\:%SZ')}}"
+    deploy_date: "{{ lookup('pipe', 'date +%Y-%m-%d\\ %H:%M:%SZ') }}"
   copy:
     content: |
       {{ '-' * 82 }}
