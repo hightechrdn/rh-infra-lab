@@ -8,7 +8,7 @@
       {{ '-' * 82 }}
       |Lab environment UUID: {{ '%-58s'|format(uuid) }}|
       |Deployed by: {{ '%-67s'|format(user) }}|
-      |Deployment completed: {{ '%-63s'|format(deploy_date) }}|
+      |Deployment completed: {{ '%-58s'|format(deploy_date) }}|
       {{ '-' * 82 }}
       |{{ '%-30s'|format('Purpose') }}|{{ '%-12s'|format('Instance No.') }}|{{ '%-20s'|format('Instance ID') }}|{{ '%-15s'|format('IP address') }}|
       |{{ '-' * 30 }}|{{ '-' * 12 }}|{{ '-' * 20 }}|{{ '-' * 15 }}|
