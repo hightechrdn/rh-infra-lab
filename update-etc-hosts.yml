@@ -13,4 +13,4 @@
         path: "{{ hosts_file }}"
         regexp: "{{ item }}"
         line: "{{ item }}" 
-      loop: "{{ lookup('file', lab_hosts_file) }}"
+      loop: "{{ lookup('file', lab_hosts_file).splitlines() }}"
