@@ -27,6 +27,7 @@
         - launched_ec2_instances
       ami_launch_index: "{{ item.ami_launch_index }}"
       hostname: "{{ item.private_ip }}"
+      fqdn: "{{ host_name }}.{{ domain }}"
       id: "{{ item.id }}"
       private_ip: "{{ item.private_ip }}"
       purpose: "{{ purpose }}"
@@ -43,14 +44,14 @@
     loop: "{{ ec2.instances }}"
   
   - name: Set hostname on new host
-    command: "hostnamectl set-hostname {{ hostname }}.{{ domain }}"
+    command: "hostnamectl set-hostname {{ host_name }}.{{ domain }}"
     loop: "{{ ec2.instances }}"
   
   - name: Update /etc/hosts on new host
     lineinfile: 
       path: "/etc/hosts"
       regexp: "{{ item.private_ip }}"
-      line: "{{ item.private_ip }} {{ hostname }}.{{ domain }}"
+      line: "{{ item.private_ip }} {{ host_name }}.{{ domain }}"
     loop: "{{ ec2.instances }}"
   become: True
   delegate_to: "{{ item.private_dns_name }}"
@@ -61,8 +62,8 @@
   - name: Add new hosts to /etc/hosts
     lineinfile:
       path: /etc/hosts
-      regexp: "^{{ ip_address }}"
-      line: "{{ ip_address }} {{ hostname }}.{{ domain }}"
+      regexp: "^{{ hostvars[item]['private_ip'] }}"
+      line: "{{ hostvars[item]['private_ip'] }} {{ hostvars[item]['fqdn'] }}"
     loop: "{{ groups[group_launched] }}"
   when: not create_lab_env_doc
 
