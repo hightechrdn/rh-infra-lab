@@ -4,9 +4,9 @@
   copy:
     content: |
       {{ '-' * 82 }}
-      | {{ '%-80s'|format('Lab environment UUID: 'uuid) }}|
-      | {{ '%-80s'|format('Deployed by: 'user) }}|
-      | {{ '%-80s'|format('Deployment date: 'deploy_date) }}|
+      |Lab environment UUID: {{ '%-58s'|format(uuid) }}|
+      |Deployed by: {{ '%-67s'|format(user) }}|
+      |Deployment date: {{ '%-63s'|format(deploy_date) }}|
       {{ '-' * 82 }}
       |{{ '%-30s'|format('Purpose') }}|{{ '%-12s'|format('Instance No.') }}|{{ '%-20s'|format('Instance ID') }}|{{ '%-15s'|format('IP address') }}|
       |{{ '-' * 30 }}|{{ '-' * 12 }}|{{ '-' * 20 }}|{{ '-' * 15 }}|
