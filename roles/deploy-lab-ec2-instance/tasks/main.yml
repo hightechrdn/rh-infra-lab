@@ -23,7 +23,7 @@
   - name: Add new instance to host group
     add_host:
       groups:
-        - "{{ system_type | regex_replace ('-','_') }}_launched"
+        - "{{ group_launched }}"
         - launched_ec2_instances
       ami_launch_index: "{{ item.ami_launch_index }}"
       hostname: "{{ item.private_ip }}"
@@ -63,7 +63,7 @@
       path: /etc/hosts
       regexp: "^{{ ip_address }}"
       line: "{{ ip_address }} {{ hostname }}.{{ domain }}"
-    loop: "{{ system_type | regex_replace ('-','_') }}_launched"
+    loop: "{{ groups[group_launched] }}"
   when: not create_lab_env_doc
 
 - name: Run tasks to document new lab environment
