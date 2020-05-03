@@ -1,0 +1,16 @@
+---
+# Update /etc/hosts. Requires root privileges.
+- name: Add lab systems to /etc/hosts
+  hosts: localhost
+  become: True
+  gather_facts: False
+  vars:
+    hosts_file: "/etc/hosts"
+    lab_hosts_file: "/lab01/rh-infra-lab-hosts"
+  tasks:
+    - name: Update /etc/hosts
+      lineinfile:
+        path: "{{ hosts_file }}"
+        regexp: "{{ item }}"
+        line: "{{ item }}" 
+      loop: "{{ lookup('file', lab_hosts_file) }}"
