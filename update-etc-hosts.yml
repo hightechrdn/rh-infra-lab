@@ -9,8 +9,7 @@
     lab_hosts_file: "/lab01/rh-infra-lab-hosts"
   tasks:
     - name: Update /etc/hosts
-      lineinfile:
+      blockinfile:
         path: "{{ hosts_file }}"
-        regexp: "{{ item }}"
-        line: "{{ item }}" 
-      loop: "{{ lookup('file', lab_hosts_file).splitlines() }}"
+        block: "{{ lookup('file', lab_hosts_file) }}"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - LAB HOSTS" 
