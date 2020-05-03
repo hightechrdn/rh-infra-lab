@@ -1,8 +1,16 @@
+---
+# General lab environment settings
 base_domain: "demo1.pd.stonedoor.io"
 project: "demo1-labenv"
 region: "us-east-2"
 vpc_subnet_id: "subnet-0c020946935fab135"
 security_groups: "lab-systems-private"
+# RHEL 8 client systems
+rhel8_client_instance_type: "t3.medium"
 rhel8_client_image: "ami-0e66d4735ab291b3e"
+# RHEL 8 IdM servers
+rhel8_idm_server_instance_type: "t3.medium"
 rhel8_idm_server_image: "ami-0791ef89192654dca"
+# RHEL 7 Satellite 6 servers
+rhel7_sat6_server_instance_type: "t3.xlarge"
 rhel7_sat6_server_image: "ami-064c98f6ca669f230"

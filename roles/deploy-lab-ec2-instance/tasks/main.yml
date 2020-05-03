@@ -43,19 +43,29 @@
     loop: "{{ ec2.instances }}"
   
   - name: Set hostname on new host
-    command: "hostnamectl set-hostname {{ hostname }}"
+    command: "hostnamectl set-hostname {{ hostname }}.{{ domain }}"
     loop: "{{ ec2.instances }}"
   
   - name: Update /etc/hosts on new host
     lineinfile: 
       path: "/etc/hosts"
       regexp: "{{ item.private_ip }}"
-      line: "{{ item.private_ip }} {{ hostname }}"
+      line: "{{ item.private_ip }} {{ hostname }}.{{ domain }}"
     loop: "{{ ec2.instances }}"
   become: True
   delegate_to: "{{ item.private_dns_name }}"
   when: not create_lab_env_doc
   
+- name: Update control node for new hosts
+  block:
+  - name: Add new hosts to /etc/hosts
+    lineinfile:
+      path: /etc/hosts
+      regexp: "^{{ ip_address }}"
+      line: "{{ ip_address }} {{ hostname }}.{{ domain }}"
+    loop: "{{ system_type | regex_replace ('-','_') }}_launched"
+  when: not create_lab_env_doc
+
 - name: Run tasks to document new lab environment
   include_tasks: lab_env_doc.yml
   when: create_lab_env_doc
