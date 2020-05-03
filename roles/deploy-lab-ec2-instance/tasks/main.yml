@@ -63,7 +63,7 @@
     lineinfile:
       path: "{{ hosts_file }}"
       regexp: "^{{ hostvars[item]['private_ip'] }}"
-      line: "{{ hostvars[item]['private_ip'] }} {{ hostvars[item]['fqdn'] }}"
+      line: "{{ hostvars[item]['private_ip'] }}\t{{ hostvars[item]['fqdn'] }}"
       create: yes
     loop: "{{ groups[group_launched] }}"
   when: not create_lab_env_doc

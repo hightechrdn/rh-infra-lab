@@ -10,7 +10,7 @@
       |Deployed by: {{ '%-81s'|format(user) }}|
       |Deployment completed: {{ '%-72s'|format(deploy_date) }}|
       {{ '-' * 96 }}
-      |{{ '%-27s'|format('Purpose') }}|{{ '%-3s'|format('Num') }}|{{ '%-15s'|format('IP address') }}|{{ '%-46s'|format('FQDN') }}
+      |{{ '%-27s'|format('Purpose') }}|{{ '%-3s'|format('Num') }}|{{ '%-15s'|format('IP address') }}|{{ '%-46s'|format('FQDN') }}|
       |{{ '-' * 27 }}|{{ '-' * 3 }}|{{ '-' * 15 }}|{{ '-' * 46 }}|
     dest: "/tmp/{{ uuid }}-lab-environment.txt"
 
