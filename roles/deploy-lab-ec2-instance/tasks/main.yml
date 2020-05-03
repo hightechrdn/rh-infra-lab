@@ -5,7 +5,7 @@
   - name: Launch EC2 instance
     ec2:
        key_name: "{{ my_keyname }}"
-       group: "{{ security_group }}"
+       group: "{{ security_groups }}"
        instance_type: "{{ instance_type }}"
        image: "{{ image }}"
        count: "{{ count }}"
