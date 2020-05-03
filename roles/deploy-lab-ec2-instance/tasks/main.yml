@@ -15,7 +15,7 @@
          Name: "{{ uuid }}-{{ system_type }}"
          project: "{{ project }}"
          labenv: "{{ uuid }}"
-         user: "{{ lookup('env','USER') }}"
+         user: "{{ user }}"
        vpc_subnet_id: "{{ vpc_subnet_id }}"
        assign_public_ip: no
     register: ec2
