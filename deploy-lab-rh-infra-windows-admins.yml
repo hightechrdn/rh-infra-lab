@@ -6,7 +6,6 @@
   tasks:
   - name: Generate UUID
     shell:
-      set -o pipefail
       uuidgen | cut -b 1,2,3,4
     register: uuid_output
 
