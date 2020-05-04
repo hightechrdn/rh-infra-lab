@@ -1,6 +1,7 @@
 ---
 # General lab environment settings
 base_domain: "demo1.pd.stonedoor.io"
+lab_data_dir: "/lab01"
 project: "demo1-labenv"
 region: "us-east-2"
 vpc_subnet_id: "subnet-0c020946935fab135"

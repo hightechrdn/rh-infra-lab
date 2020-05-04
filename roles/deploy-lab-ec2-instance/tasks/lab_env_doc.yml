@@ -12,16 +12,16 @@
       {{ '-' * 96 }}
       |{{ '%-27s'|format('Purpose') }}|{{ '%-3s'|format('Num') }}|{{ '%-15s'|format('IP address') }}|{{ '%-46s'|format('FQDN') }}|
       |{{ '-' * 27 }}|{{ '-' * 3 }}|{{ '-' * 15 }}|{{ '-' * 46 }}|
-    dest: "/tmp/{{ uuid }}-lab-environment.txt"
+    dest: "{{ lab_data_dir }}/{{ uuid }}-lab-environment.txt"
 
 - name: Add EC2 instance information to lab environment file
   lineinfile:
-    path: "/tmp/{{ uuid }}-lab-environment.txt"
+    path: "{{ lab_data_dir }}/{{ uuid }}-lab-environment.txt"
     regexp: "{{ hostvars[item]['private_ip'] }}"
     line: "|{{ '%-27s'|format(hostvars[item]['purpose'])|truncate(27,True,'',0) }}|{{ '%-3s'|format(hostvars[item]['ami_launch_index']) }}|{{ '%-15s'|format(hostvars[item]['private_ip']) }}|{{ '%-46s'|format(hostvars[item]['fqdn']) }}|"
   loop: "{{ groups['launched_ec2_instances'] }}"
 
 - name: Close out table in lab environment file
   shell: |
-    echo "{{ '-' * 96 }}" >> /tmp/{{ uuid }}-lab-environment.txt
+    echo "{{ '-' * 96 }}" >> {{ lab_data_dir }}/{{ uuid }}-lab-environment.txt
 
