@@ -13,6 +13,7 @@
       |{{ '%-27s'|format('Purpose') }}|{{ '%-3s'|format('Num') }}|{{ '%-15s'|format('IP address') }}|{{ '%-46s'|format('FQDN') }}|
       |{{ '-' * 27 }}|{{ '-' * 3 }}|{{ '-' * 15 }}|{{ '-' * 46 }}|
     dest: "{{ lab_data_dir }}/{{ uuid }}-lab-environment.txt"
+    mode: "0644"
 
 - name: Add EC2 instance information to lab environment file
   lineinfile:
@@ -24,4 +25,3 @@
 - name: Close out table in lab environment file
   shell: |
     echo "{{ '-' * 96 }}" >> {{ lab_data_dir }}/{{ uuid }}-lab-environment.txt
-

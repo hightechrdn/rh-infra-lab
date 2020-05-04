@@ -8,8 +8,8 @@
     hosts_file: "/etc/hosts"
     lab_hosts_file: "/lab01/rh-infra-lab-hosts"
   tasks:
-    - name: Update /etc/hosts
-      blockinfile:
-        path: "{{ hosts_file }}"
-        block: "{{ lookup('file', lab_hosts_file) }}"
-        marker: "# {mark} ANSIBLE MANAGED BLOCK - LAB HOSTS" 
+  - name: Update /etc/hosts
+    blockinfile:
+      path: "{{ hosts_file }}"
+      block: "{{ lookup('file', lab_hosts_file) }}"
+      marker: "# {mark} ANSIBLE MANAGED BLOCK - LAB HOSTS" 

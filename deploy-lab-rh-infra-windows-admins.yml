@@ -2,88 +2,93 @@
 # Deploy lab environment on AWS EC2: Red Hat Infrastructure for Windows Administrators
 - name: Assign UUID to lab deployment
   hosts: localhost
-  gather_facts: False
+  gather_facts: false
   tasks:
-    - name: Generate UUID
-      shell: uuidgen | cut -b 1,2,3,4
-      register: uuid_output
+  - name: Generate UUID
+    shell:
+      set -o pipefail
+      uuidgen | cut -b 1,2,3,4
+    register: uuid_output
 
-    - set_fact:
-        uuid: "{{ uuid_output.stdout }}"
+  - name: Set UUID fact
+    set_fact:
+      uuid: "{{ uuid_output.stdout }}"
   tags: always
 
 - name: Provision lab environment on AWS EC2
   hosts: localhost
-  gather_facts: False
+  gather_facts: false
   tasks:
-    - name: Upload SSH public key to AWS EC2
-      include_role:
-        name: ssh-key-ec2
-      tags: always
+  - name: Upload SSH public key to AWS EC2
+    include_role:
+      name: ssh-key-ec2
+    tags: always
 
-    - name: Provision RHEL 8 client(s)
-      include_role:
-        name: deploy-lab-ec2-instance
-      vars:
-        instance_type: "{{ rhel8_client_instance_type }}" 
-        image: "{{ rhel8_client_image }}"
-        purpose: "RHEL 8 client"
-        system_type: "rhel8_client"
-      tags: rhel8_client
+  - name: Provision RHEL 8 client(s)
+    include_role:
+      name: deploy-lab-ec2-instance
+    vars:
+      instance_type: "{{ rhel8_client_instance_type }}"
+      image: "{{ rhel8_client_image }}"
+      purpose: "RHEL 8 client"
+      system_type: "rhel8_client"
+    tags: rhel8_client
 
-    - name: Provision RHEL 8 IdM server(s)
-      include_role:
-        name: deploy-lab-ec2-instance
-      vars:
-        instance_type: "{{ rhel8_idm_server_instance_type }}" 
-        image: "{{ rhel8_idm_server_image }}"
-        purpose: "RHEL 8 IdM server"
-        system_type: "rhel8_idm_server"
-      tags: rhel8_idm_server
+  - name: Provision RHEL 8 IdM server(s)
+    include_role:
+      name: deploy-lab-ec2-instance
+    vars:
+      instance_type: "{{ rhel8_idm_server_instance_type }}"
+      image: "{{ rhel8_idm_server_image }}"
+      purpose: "RHEL 8 IdM server"
+      system_type: "rhel8_idm_server"
+    tags: rhel8_idm_server
 
-    - name: Provision Red Hat Satellite 6 server(s)
-      include_role:
-        name: deploy-lab-ec2-instance
-      vars:
-        instance_type: "{{ rhel7_sat6_server_instance_type }}"
-        image: "{{ rhel7_sat6_server_image }}"
-        purpose: "Satellite 6 server (RHEL 7)"
-        system_type: "rhel7_sat6_server"
-      tags: rhel7_sat6_server
+  - name: Provision Red Hat Satellite 6 server(s)
+    include_role:
+      name: deploy-lab-ec2-instance
+    vars:
+      instance_type: "{{ rhel7_sat6_server_instance_type }}"
+      image: "{{ rhel7_sat6_server_image }}"
+      purpose: "Satellite 6 server (RHEL 7)"
+      system_type: "rhel7_sat6_server"
+    tags: rhel7_sat6_server
 
-    - name: Document lab environment
-      vars:
-        create_lab_env_doc: True
-      include_role:
-        name: deploy-lab-ec2-instance
-      tags: always
+  - name: Document lab environment
+    vars:
+      create_lab_env_doc: true
+    include_role:
+      name: deploy-lab-ec2-instance
+    tags: always
 
-    - name: Remove SSH public key from AWS EC2
-      vars:
-        remove_aws_key: True
-      include_role:
-        name: ssh-key-ec2
-      tags: always
+  - name: Remove SSH public key from AWS EC2
+    vars:
+      remove_aws_key: true
+    include_role:
+      name: ssh-key-ec2
+    tags: always
 
 - name: Configure Satellite 6 servers
   hosts: rhel7_sat6_server_launched
   tasks:
-    - name: Execute RHEL 7 Satellite 6 server configuration role
-      include_role:
-        name: config-rhel7-sat6-server
+  - name: Execute RHEL 7 Satellite 6 server configuration role
+    include_role:
+      name: config-rhel7-sat6-server
+  tags: rhel7_sat6_server
 
 - name: Configure access to new hosts
   hosts: launched_ec2_instances
   tasks:
-    - name: Add local account(s)
-      include_role:
-        name: local-accounts
+  - name: Add local account(s)
+    include_role:
+      name: local-accounts
+  tags: always
 
 - name: Communicate deployment results
   hosts: localhost
-  gather_facts: False
+  gather_facts: false
   tasks:
-    - name: Print lab information
-      debug:
-        msg: "Your UUID is {{ uuid }}. See {{ lab_data_dir }}/{{ uuid }}-lab-environment.txt for list of hosts deployed."
+  - name: Print lab information
+    debug:
+      msg: "Your UUID is {{ uuid }}. See {{ lab_data_dir }}/{{ uuid }}-lab-environment.txt for list of hosts deployed."
   tags: always

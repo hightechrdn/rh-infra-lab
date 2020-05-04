@@ -19,7 +19,7 @@
        vpc_subnet_id: "{{ vpc_subnet_id }}"
        assign_public_ip: no
     register: ec2
-  
+
   - name: Add new instance to host group
     add_host:
       groups:
@@ -34,7 +34,7 @@
       uuid: "{{ uuid }}"
     loop: "{{ ec2.instances }}"
   when: not create_lab_env_doc
-  
+
 - name: Basic host configuration
   block:
   - name: Wait for SSH to come up
@@ -42,13 +42,13 @@
       delay: 60
       timeout: 320
     loop: "{{ ec2.instances }}"
-  
+
   - name: Set hostname on new host
     command: "hostnamectl set-hostname {{ host_name }}.{{ domain }}"
     loop: "{{ ec2.instances }}"
-  
+
   - name: Update /etc/hosts on new host
-    lineinfile: 
+    lineinfile:
       path: "/etc/hosts"
       regexp: "{{ item.private_ip }}"
       line: "{{ item.private_ip }} {{ host_name }}.{{ domain }}"
@@ -56,7 +56,7 @@
   become: True
   delegate_to: "{{ item.private_dns_name }}"
   when: not create_lab_env_doc
-  
+
 - name: Update control node for new hosts
   block:
   - name: Add new hosts to hosts file
@@ -65,6 +65,7 @@
       regexp: "^{{ hostvars[item]['private_ip'] }}"
       line: "{{ hostvars[item]['private_ip'] }}\t{{ hostvars[item]['fqdn'] }}"
       create: yes
+      mode: '0644'
     loop: "{{ groups[group_launched] }}"
   when: not create_lab_env_doc
 

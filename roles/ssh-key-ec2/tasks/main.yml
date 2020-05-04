@@ -7,11 +7,11 @@
       path: "{{ ssh_key_dir }}"
       state: directory
       mode: '0700'
-  
+
   - name: Generate SSH key for local user
     openssh_keypair:
       path: "{{ my_keyfile }}"
-  
+
   - name: Upload public key to AWS
     ec2_key:
       name: "{{ my_keyname }}"
@@ -26,4 +26,4 @@
     region: "{{ region }}"
     state: absent
   when: remove_aws_key
-  
+
