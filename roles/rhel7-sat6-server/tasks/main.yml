@@ -1,5 +1,5 @@
 ---
-# tasks file for rhel7-sa6-server 
+# tasks file for rhel7-sat6-server 
 - name: Run Satellite 6 installer
   become: True
   shell: |
