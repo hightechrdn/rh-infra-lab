@@ -1,11 +1,8 @@
 ---
 # remove_lab_environment.yml
-- name: Remove lab environment EC2 instances based on UUID
+- name: Remove EC2 instances
   hosts: localhost
   gather_facts: false
-  vars:
-    filters:
-      "tag:labenv": "{{ UUID }}"
   tasks:
   - name:
     include_role:
