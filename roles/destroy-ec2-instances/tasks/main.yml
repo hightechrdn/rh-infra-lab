@@ -1,0 +1,14 @@
+---
+# tasks file for destroy-ec2-instances
+- name: Get EC2 instance IDs from AWS
+  ec2_instance_info:
+    filters: "{{ filters }}"
+    region: "{{ region }}"
+  register: ec2
+
+- name: Delete EC2 instances by IDs
+  ec2_instance:
+    instance_ids: "{{ item.instance_id }}"
+    region: "{{ region }}"
+    state: absent
+  loop: "{{ ec2.instances }}"
