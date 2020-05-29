@@ -4,6 +4,11 @@
   hosts: localhost
   gather_facts: false
   tasks:
-  - name:
+  - name: Call destroy-ec2-instances role
     include_role:
       name: destroy-ec2-instances 
+  - name: Remove host entries from lab hosts file
+    lineinfile:
+      path: "{{ lab_hosts_path }}"
+      regex: "{{ lab_hosts_regexp }}"
+      state: absent

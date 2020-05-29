@@ -4,12 +4,9 @@
   hosts: localhost
   become: True
   gather_facts: False
-  vars:
-    hosts_file: "/etc/hosts"
-    lab_hosts_file: "/lab01/rh-infra-lab-hosts"
   tasks:
-  - name: Update /etc/hosts
+  - name: Update hosts file to match current lab systems
     blockinfile:
-      path: "{{ hosts_file }}"
-      block: "{{ lookup('file', lab_hosts_file) }}"
+      path: /etc/hosts
+      block: "{{ lookup('file', lab_hosts_path) }}"
       marker: "# {mark} ANSIBLE MANAGED BLOCK - LAB HOSTS" 

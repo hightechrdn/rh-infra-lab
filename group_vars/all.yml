@@ -2,12 +2,17 @@
 # General lab environment settings
 base_domain: "demo1.pd.stonedoor.io"
 lab_data_dir: "/lab01"
+lab_hosts_file: "rh-infra-lab-hosts"
+lab_hosts_path: "{{ lab_data_dir }}/{{ lab_hosts_file }}"
 project: "demo1-labenv"
 region: "us-east-2"
 
 # set default filters for destroy-ec2-instances role
 filters:
   "tag:labenv": "{{ UUID }}"
+
+# cleanup lab hosts file based on this regular expression 
+lab_hosts_regexp: "{{ UUID }}"
 
 # set AWS network defaults
 vpc_subnet_id: "subnet-0c020946935fab135"
