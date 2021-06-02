@@ -7,12 +7,12 @@ lab_hosts_path: "{{ lab_data_dir }}/{{ lab_hosts_file }}"
 project: "demo1-labenv"
 region: "us-east-2"
 
-# set default filters for destroy-ec2-instances role
+# Set default filter for destroy, start, and stop EC2 instances
 filters:
-  "tag:labenv": "{{ UUID }}"
+  "tag:deployment": "{{ uuid }}"
 
 # cleanup lab hosts file based on this regular expression 
-lab_hosts_regexp: "{{ UUID }}"
+lab_hosts_regexp: "{{ uuid }}"
 
 # set AWS network defaults
 vpc_subnet_id: "subnet-0c020946935fab135"
