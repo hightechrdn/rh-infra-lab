@@ -9,7 +9,7 @@ region: "us-east-2"
 
 # Set default filter for destroy, start, and stop EC2 instances
 filters:
-  "tag:deployment": "{{ uuid }}"
+  "tag:labenv": "{{ uuid }}"
 
 # cleanup lab hosts file based on this regular expression 
 lab_hosts_regexp: "{{ uuid }}"
