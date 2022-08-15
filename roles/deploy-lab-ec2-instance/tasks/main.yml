@@ -3,7 +3,7 @@
 - name: Deploy new host on AWS EC2
   block:
   - name: Launch EC2 instance
-    ec2:
+    amazon.aws.ec2:
        key_name: "{{ my_keyname }}"
        group: "{{ security_groups }}"
        instance_type: "{{ instance_type }}"
