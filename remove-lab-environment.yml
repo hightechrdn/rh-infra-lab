@@ -5,10 +5,10 @@
   gather_facts: false
   tasks:
   - name: Call destroy-ec2-instances role
-    include_role:
+    ansible.builtin.include_role:
       name: destroy-ec2-instances 
   - name: Remove host entries from lab hosts file
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: "{{ lab_hosts_path }}"
       regex: "{{ lab_hosts_regexp }}"
       state: absent

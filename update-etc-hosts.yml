@@ -6,7 +6,7 @@
   gather_facts: False
   tasks:
   - name: Update hosts file to match current lab systems
-    blockinfile:
+    ansible.builtin.blockinfile:
       path: /etc/hosts
       block: "{{ lookup('file', lab_hosts_path) }}"
       marker: "# {mark} ANSIBLE MANAGED BLOCK - LAB HOSTS" 

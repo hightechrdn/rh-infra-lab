@@ -2,7 +2,7 @@
 # tasks file for rhel7-sat6-server 
 - name: Run Satellite 6 installer
   become: True
-  shell: |
+  ansible.builtin.shell: |
     satellite-installer --scenario satellite -v \
       --foreman-initial-organization SDG \
       --foreman-initial-location LAB \

@@ -3,30 +3,30 @@
 - name: Update Satellite 6 configuration for deployed hostname
   block:
   - name: Save original hostname
-    command: uname -n
+    ansible.builtin.command: uname -n
     register: orig_hostname
 
   - name: Temporarily change hostname to baseline value used when building Sat6 image
-    command: "hostnamectl set-hostname rhel7-sat6-server-baseline.demo1.pd.stonedoor.io"
+    ansible.builtin.command: "hostnamectl set-hostname rhel7-sat6-server-baseline.demo1.pd.stonedoor.io"
 
   - name: Add Sat6 baseline hostname to /etc/hosts
-    lineinfile:
+    ansible.builtin.lineinfile:
       line: "{{ ip_address }} rhel7-sat6-server-baseline.demo1.pd.stonedoor.io"
       path: /etc/hosts
       state: present
 
   - name: Run Satellite 6 change hostname command
-    shell: |
+    ansible.builtin.shell: |
       satellite-change-hostname {{ orig_hostname.stdout }} -y \
         --username admin \
         --password redhat
 
   - name: Read /etc/hosts file and dedup
-    command: awk '!a[$0]++' /etc/hosts
+    ansible.builtin.command: awk '!a[$0]++' /etc/hosts
     register: final_hosts
 
   - name: Update /etc/hosts
-    copy:
+    ansible.builtin.copy:
       content: "{{ final_hosts.stdout }}\n"
       dest: /etc/hosts
   become: True

@@ -3,7 +3,7 @@
 - name: Add headers to lab environment file
   vars:
     deploy_date: "{{ lookup('pipe', 'date +%Y-%m-%d\\ %H:%M:%SZ') }}"
-  copy:
+  ansible.builtin.copy:
     content: >-
       {{ '-' * 96 }}
 
@@ -23,7 +23,7 @@
     mode: "0644"
 
 - name: Add EC2 instance information to lab environment file
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ lab_data_dir }}/{{ uuid }}-lab-environment.txt"
     regexp: "{{ hostvars[item]['private_ip'] }}"
     line: >-
@@ -34,5 +34,5 @@
   loop: "{{ groups['launched_ec2_instances'] }}"
 
 - name: Close out table in lab environment file
-  shell: |
+  ansible.builtin.shell: |
     echo "{{ '-' * 96 }}" >> {{ lab_data_dir }}/{{ uuid }}-lab-environment.txt

@@ -3,13 +3,13 @@
 - name: Create AWS deployment key
   block:
   - name: Create directory for SSH key
-    file:
+    ansible.builtin.file:
       path: "{{ ssh_key_dir }}"
       state: directory
       mode: '0700'
 
   - name: Generate SSH key for local user
-    openssh_keypair:
+    community.crypto.openssh_keypair:
       path: "{{ my_keyfile }}"
 
   - name: Upload public key to AWS

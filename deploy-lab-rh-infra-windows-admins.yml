@@ -5,7 +5,7 @@
   gather_facts: false
   tasks:
   - name: Generate UUID
-    shell:
+    ansible.builtin.shell:
       uuidgen | cut -b 1,2,3,4
     register: uuid_output
 
@@ -19,13 +19,17 @@
   gather_facts: false
   tasks:
   - name: Upload SSH public key to AWS EC2
-    include_role:
+    ansible.builtin.include_role:
       name: ssh-key-ec2
+      apply:
+        tags: always
     tags: always
 
   - name: Provision RHEL 8 client(s)
-    include_role:
+    ansible.builtin.include_role:
       name: deploy-lab-ec2-instance
+      apply:
+        tags: rhel8_client
     vars:
       instance_type: "{{ rhel8_client_instance_type }}"
       image: "{{ rhel8_client_image }}"
@@ -34,8 +38,10 @@
     tags: rhel8_client
 
   - name: Provision RHEL 8 IdM server(s)
-    include_role:
+    ansible.builtin.include_role:
       name: deploy-lab-ec2-instance
+      apply:
+        tags: rhel8_idm_server
     vars:
       instance_type: "{{ rhel8_idm_server_instance_type }}"
       image: "{{ rhel8_idm_server_image }}"
@@ -44,8 +50,10 @@
     tags: rhel8_idm_server
 
   - name: Provision Red Hat Satellite 6 server(s)
-    include_role:
+    ansible.builtin.include_role:
       name: deploy-lab-ec2-instance
+      apply:
+        tags: rhel7_sat6_server
     vars:
       instance_type: "{{ rhel7_sat6_server_instance_type }}"
       image: "{{ rhel7_sat6_server_image }}"
@@ -56,31 +64,39 @@
   - name: Document lab environment
     vars:
       create_lab_env_doc: true
-    include_role:
+    ansible.builtin.include_role:
       name: deploy-lab-ec2-instance
+      apply:
+        tags: always
     tags: always
 
   - name: Remove SSH public key from AWS EC2
     vars:
       remove_aws_key: true
-    include_role:
+    ansible.builtin.include_role:
       name: ssh-key-ec2
+      apply:
+        tags: always
     tags: always
 
 - name: Configure Satellite 6 servers
   hosts: rhel7_sat6_server_launched
   tasks:
   - name: Execute RHEL 7 Satellite 6 server configuration role
-    include_role:
+    ansible.builtin.include_role:
       name: config-rhel7-sat6-server
+      apply:
+        tags: rhel7_sat6_server
   tags: rhel7_sat6_server
 
 - name: Configure access to new hosts
   hosts: launched_ec2_instances
   tasks:
   - name: Add local account(s)
-    include_role:
+    ansible.builtin.include_role:
       name: local-accounts
+      apply:
+        tags: always
   tags: always
 
 - name: Communicate deployment results
@@ -88,6 +104,6 @@
   gather_facts: false
   tasks:
   - name: Print lab information
-    debug:
+    ansible.builtin.debug:
       msg: "Your UUID is {{ uuid }}. See {{ lab_data_dir }}/{{ uuid }}-lab-environment.txt for list of hosts deployed."
   tags: always
